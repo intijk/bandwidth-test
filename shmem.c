@@ -10,6 +10,7 @@ long_options[]=
 	{ "debug",    optional_argument, NULL, 'd'},
 	{ "size",     required_argument, NULL, 's'},
 	{ "topology", required_argument, NULL, 't'},
+	{ "help",     optional_argument, NULL, 'h'},
 	{ NULL,       no_argument,       NULL,  0 },
 };
 
@@ -58,9 +59,6 @@ size_t parse_size(char *optarg){
 
 int main(int argc, char *argv[])
 {
-	start_pes(0);		
-	int npes=shmem_n_pes();
-	int me=shmem_my_pe();
 
 	
 
@@ -68,6 +66,7 @@ int main(int argc, char *argv[])
 	   -d --debug default turned off
 	   -s --size size of block for testing default 128M
 	   -t --topology topology of the communication, default ring
+	   -h --print this help
 	*/
 	int debug=0;
 	size_t block_size=128*1024*1024; /* default 128M */
@@ -75,11 +74,15 @@ int main(int argc, char *argv[])
 	topo="ring";		
 	while(1){
 		int oidx;
-		const int c=getopt_long(argc, argv, "d::s:t:",long_options,&oidx);
+		const int c=getopt_long(argc, argv, "d::h::s:t:",long_options,&oidx);
 		if(c==-1){
 			break;
 		}
 		switch(c){
+			case 'h':
+				printf("-d --debug default turned off\n-s --size size of block for testing default 128M\n-t --topology topology of the communication, default ring\n-h --print this help\n");
+				return 0;
+				break;
 			case 'd':
 				debug=1;
 				break;
@@ -103,6 +106,10 @@ int main(int argc, char *argv[])
 	printf("Topo=%s\n", topo);
 	printf("Debug=%s\n", debug==1?"on":"off");
 	puts("");
+
+	start_pes(0);		
+	int npes=shmem_n_pes();
+	int me=shmem_my_pe();
 
 	
 	void *block=shmalloc(block_size);
