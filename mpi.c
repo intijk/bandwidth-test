@@ -145,9 +145,10 @@ int main (int argc, char *argv[])
 	double et=MPI_Wtime();
 
 	printf("Transmission time=%.2fs\n", et-st);		
-	char r[100];
+	char r[100],ra[100];
 	parse_readable_size(size*block_size/(et-st), r);
-	printf("Bandwidth=%s\n", r);
+	parse_readable_size(block_size/(et-st), ra);
+	printf("Total Bandwidth=%s/s Average Bandwidth=%s/s\n",r,ra);
 
 	MPI_Finalize();
 	

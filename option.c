@@ -17,13 +17,13 @@ void parse_readable_size(size_t s, char* p){
 	g=m/1024;
 	
 	if(g>=1){
-		sprintf(p, "%.2fG\n", g);
+		sprintf(p, "%.2fG", g);
 	}else if(m>=1){
-		sprintf(p, "%.2fM\n", m);
+		sprintf(p, "%.2fM", m);
 	}else if(k>=1){
-		sprintf(p, "%.2fK\n", k);
+		sprintf(p, "%.2fK", k);
 	}else
-		sprintf(p, "%.0fB\n", b);
+		sprintf(p, "%.0fB", b);
 
 }
 size_t parse_size(char *optarg){

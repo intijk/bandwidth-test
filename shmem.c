@@ -127,9 +127,10 @@ int main(int argc, char *argv[])
 	double ttime=tu/1e6;
 	printf("%f\n", ttime);
 
-	char r[100];	
+	char r[100],r1[100];	
 	parse_readable_size(npes*block_size/ttime, r);
-	printf("Bandwidth=%s\n",r);
+	parse_readable_size(block_size/ttime, r1);
+	printf("Total Bandwidth=%s/s Average Bandwidth=%s/s\n",r,r1);
 
 
 	return 0;
