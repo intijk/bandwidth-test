@@ -12,7 +12,7 @@ int main (int argc, char *argv[])
 	MPI_Comm_size (MPI_COMM_WORLD, &size);	/* get number of processes */
 	struct utsname unameData;
 	uname(&unameData);
-	printf("%s\n", unameData.nodename);
+	printf("%d: %s\n", rank, unameData.nodename);
 	MPI_Finalize();
 	return 0;
 }
