@@ -24,9 +24,6 @@ int main(int argc, char *argv[])
 
 	
 	struct timeval start_time, end_time;
-	gettimeofday(&start_time, NULL);	
-
-	shmem_barrier_all();		
 
 	int target;
 	if(strcmp(topo,"ring")==0){
@@ -38,10 +35,14 @@ int main(int argc, char *argv[])
 		exit(-1);
 	}
 
+
+	shmem_barrier_all();		
+	gettimeofday(&start_time, NULL);	
+
 	shmem_putmem(block,block,block_size,target);
 
-	gettimeofday(&end_time, NULL);	
 	shmem_barrier_all();
+	gettimeofday(&end_time, NULL);	
 
 	double tu=end_time.tv_sec*1e6+end_time.tv_usec-(start_time.tv_sec*1e6+start_time.tv_usec);
 	double ttime=tu/1e6;
