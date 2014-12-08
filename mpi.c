@@ -3,6 +3,8 @@
 #include <sys/utsname.h>
 #include <stdlib.h>
 #include <string.h>
+#include "option.h"
+
 #define MAX_NODENAME_LENGTH 1024
 struct procinfo{
 	char nodename[MAX_NODENAME_LENGTH];
@@ -18,7 +20,12 @@ int compare(const void *a, const void *b)
 }
 int main (int argc, char *argv[])
 {
+	size_t block_size;
+	char *topo;
+	int debug;
 
+	int ret=parse_option(argc,argv,&block_size,&topo,&debug);
+	if(ret!=0) return ret;
 
 
 	int rank, size;
@@ -82,9 +89,22 @@ int main (int argc, char *argv[])
 	
 	// Asumption -- number of node is even number, each node with same number of processes.
 	
-	
 
+	int target;	
+	if(strcmp(topo,"ring")==0){
+		target=pl[(selfind+1)%size].rank;
+	}else if(strcmp(topo,"pair")==0){
+		int targetdirect=1;
+		if(selfnode%2==1){
+			targetdirect=-1;
+		}
+		target=pl[(selfind+targetdirect*selfsum)].rank;
+	}
 		
+	void *block=shmalloc(block_size);
+	memset(block,0,block_size);
+	
+	
 	
 
 	MPI_Finalize();

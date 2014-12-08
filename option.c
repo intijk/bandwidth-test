@@ -9,6 +9,23 @@ long_options[]=
 	{ NULL,       no_argument,       NULL,  0 },
 };
 
+void parse_readable_size(size_t s, char* p){
+	double k,m,g,b;	
+	b=s;
+	k=b/1024;
+	m=k/1024;
+	g=m/1024;
+	
+	if(g>=1){
+		sprintf(p, "%.2fG\n", g);
+	}else if(m>=1){
+		sprintf(p, "%.2fM\n", m);
+	}else if(k>=1){
+		sprintf(p, "%.2fK\n", k);
+	}else
+		sprintf(p, "%.0fB\n", b);
+
+}
 size_t parse_size(char *optarg){
 	regex_t regex;
 	int reti;
@@ -92,7 +109,9 @@ int parse_option(int argc, char *argv[], size_t* block_size, char** topo, int* d
 	}
 	
 	printf("Config:\n");
-	printf("Block_size=%lu\n", *block_size);	
+	char r[100];
+	parse_readable_size(*block_size, r);
+	printf("Block_size=%s\n", r);	
 	printf("Topo=%s\n", *topo);
 	printf("Debug=%s\n", (*debug==1)?"on":"off");
 	puts("");

@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 	int ret=parse_option(argc,argv,&block_size,&topo,&debug);
 	if(ret!=0) return ret;
 
-	start_pes(0);		
+	start_pes(0);
 	int npes=shmem_n_pes();
 	int me=shmem_my_pe();
 
@@ -33,7 +33,11 @@ int main(int argc, char *argv[])
 		target=(me+1)%npes;
 	}else if(strcmp(topo,"pair")==0){
 		target=(me%2==0?(me+npes+1)%npes:(me+npes-1)%npes);
+	}else{
+		fprintf(stderr, "Unknow topology %s\n", topo);
+		exit(-1);
 	}
+
 	shmem_putmem(block,block,block_size,target);
 
 	gettimeofday(&end_time, NULL);	
@@ -42,8 +46,10 @@ int main(int argc, char *argv[])
 	double tu=end_time.tv_sec*1e6+end_time.tv_usec-(start_time.tv_sec*1e6+start_time.tv_usec);
 	double ttime=tu/1e6;
 	printf("%f\n", ttime);
-	
-	printf("Bandwidth=%f\n",npes*block_size/ttime);
+
+	char r[100];	
+	parse_readable_size(npes*block_size/ttime, r);
+	printf("Bandwidth=%s\n",r);
 
 
 	return 0;
