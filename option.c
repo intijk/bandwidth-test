@@ -85,7 +85,8 @@ size_t parse_time(char *optarg){
 	reti=regexec(&regex, optarg, 0, NULL, 0);
 	if(reti==0){
 		char c;
-		int n=sscanf(optarg,"%d", &delay);
+		int n;
+		sscanf(optarg,"%lu%n", &delay, &n);
 		sscanf(optarg+n,"%c", &c);
 		if(c=='s'){
 			delay*=1000000;
@@ -148,7 +149,7 @@ int parse_option(int argc, char *argv[], size_t* block_size, char** topo, int* d
 	printf("Block_size=%s\n", r);	
 	printf("Topo=%s\n", *topo);
 	printf("Debug=%s\n", (*debug==1)?"on":"off");
-	printf("Delay=%dus\n",  *delay);
+	printf("Delay=%ld us\n",  *delay);
 	puts("");
 
 	return 0;

@@ -118,7 +118,15 @@ int main(int argc, char *argv[])
 
 	shmem_barrier_all();		
 	gettimeofday(&start_time, NULL);	
-
+	if(delay){
+		printf("delay=%lu\n", delay);
+		double r=rand();	
+		double p=r/RAND_MAX;
+		double d=(double)(delay)*p;
+		long long dd=(long long)d;
+		usleep(dd);
+	}
+	
 	shmem_putmem(block,block,block_size,target);
 
 	shmem_barrier_all();
@@ -126,7 +134,7 @@ int main(int argc, char *argv[])
 
 	double tu=end_time.tv_sec*1e6+end_time.tv_usec-(start_time.tv_sec*1e6+start_time.tv_usec);
 	double ttime=tu/1e6;
-	printf("%f\n", ttime);
+	printf("Transmission time=%.2fs\n", ttime);		
 
 	char r[100],r1[100];	
 	parse_readable_size(npes*block_size/ttime, r);

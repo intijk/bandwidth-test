@@ -131,6 +131,14 @@ int main (int argc, char *argv[])
 
 	MPI_Barrier(MPI_COMM_WORLD);
 	double st=MPI_Wtime();
+	if(delay){
+		printf("delay=%lu\n", delay);
+		double r=rand();	
+		double p=r/RAND_MAX;
+		double d=(double)(delay)*p;
+		long long dd=(long long)d;
+		usleep(dd);
+	}
 
 
 	MPI_Request r1,r2;
