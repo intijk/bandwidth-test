@@ -18,11 +18,12 @@ int compare(const void * a, const void *b){
 }
 int main(int argc, char *argv[])
 {
-	size_t block_size;
+	size_t block_size,delay;
 	char *topo;
 	int debug;
 
-	int ret=parse_option(argc,argv,&block_size,&topo,&debug);
+
+	int ret=parse_option(argc,argv,&block_size,&topo,&debug,&delay);
 	if(ret!=0) return ret;
 
 	start_pes(0);

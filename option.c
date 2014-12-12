@@ -6,6 +6,7 @@ long_options[]=
 	{ "size",     required_argument, NULL, 's'},
 	{ "topology", required_argument, NULL, 't'},
 	{ "help",     optional_argument, NULL, 'h'},
+	{ "Delay",    optional_argument, NULL, 'D'},
 	{ NULL,       no_argument,       NULL,  0 },
 };
 
@@ -32,7 +33,7 @@ size_t parse_size(char *optarg){
 	reti=regcomp(&regex, "[0-9][0-9]*[kmgKMG]", 0);
 	size_t size;
 	if(reti){
-		fprintf(stderr, "Could not compile regex\n");
+		fprintf(stderr, "Could not compile regex in parse_size()\n");
 		return -1;
 	}
 
@@ -60,16 +61,50 @@ size_t parse_size(char *optarg){
 		}
 	}else if(reti==REG_NOMATCH){
 		/* format not match */
-		printf("not matach\n");
-		return -1;
+		printf("Unknown size format\n");
+		exit(0);
 	}else{
 		/* error happen */
-		return -1;
+		fprintf(stderr, "parse_size() regex match error.\n");
+		exit(-1);
 	}
 	return size;
 }
 
-int parse_option(int argc, char *argv[], size_t* block_size, char** topo, int* debug){
+size_t parse_time(char *optarg){
+	regex_t regex;
+	int reti;
+	reti=regcomp(&regex, "[0-9][0-9]*\\(u\\|\\m\\)\\?s", 0);
+	size_t size;
+	if(reti){
+		fprintf(stderr, "Could not compile regex in parse_time()\n");
+		return -1;
+	}
+
+	size_t delay;
+	reti=regexec(&regex, optarg, 0, NULL, 0);
+	if(reti==0){
+		char c;
+		int n=sscanf(optarg,"%d", &delay);
+		sscanf(optarg+n,"%c", &c);
+		if(c=='s'){
+			delay*=1000000;
+		}else if(c=='m'){
+			delay*=1000;
+		}
+	}else if(reti==REG_NOMATCH){
+		/* format not match */
+		fprintf(stderr, "Unknown time format %s\n", optarg);
+		exit(0);
+	}else{
+		/* error happen */
+		fprintf(stderr, "parse_time() regex match error.\n");
+		exit(-1);
+	}
+	return delay;
+}
+
+int parse_option(int argc, char *argv[], size_t* block_size, char** topo, int* debug, size_t* delay){
 	/* 
 	   -d --debug default turned off
 	   -s --size size of block for testing default 128M
@@ -79,9 +114,10 @@ int parse_option(int argc, char *argv[], size_t* block_size, char** topo, int* d
 	*debug=0;
 	*block_size=128*1024*1024; /* default 128M */
 	*topo="ring";
+	*delay=0; /*default delay 0us*/
 	while(1){
 		int oidx;
-		const int c=getopt_long(argc, argv, "d::h::s:t:",long_options,&oidx);
+		const int c=getopt_long(argc, argv, "d::h::s:t:D:",long_options,&oidx);
 		if(c==-1){
 			break;
 		}
@@ -95,14 +131,12 @@ int parse_option(int argc, char *argv[], size_t* block_size, char** topo, int* d
 				break;
 			case 's':
 				*block_size=parse_size(optarg);
-				if((*block_size)<0){
-					fprintf(stderr, "Block size format must be [0-9]+[KMGkmg]");
-					exit(-1);
-				}
 				break;
 			case 't':
 				*topo=optarg;
 				break;
+			case 'D':
+				*delay=parse_time(optarg);
 			default:
 				break;
 		}
@@ -114,6 +148,7 @@ int parse_option(int argc, char *argv[], size_t* block_size, char** topo, int* d
 	printf("Block_size=%s\n", r);	
 	printf("Topo=%s\n", *topo);
 	printf("Debug=%s\n", (*debug==1)?"on":"off");
+	printf("Delay=%dus\n",  *delay);
 	puts("");
 
 	return 0;
