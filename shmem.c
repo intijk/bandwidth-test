@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 	pl[me].pe=me;
 	for(i=0;i<npes;i++){
 		if(i!=me){
-			shmem_putmem(&pl[i], &pl[i], sizeof(struct peinfo), i);	
+			shmem_putmem(&pl[me], &pl[me], sizeof(struct peinfo), i);	
 		}
 	}
 	qsort(pl, npes, sizeof(struct peinfo), compare);
