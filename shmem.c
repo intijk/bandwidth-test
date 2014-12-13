@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
 			shmem_putmem(&pl[me], &pl[me], sizeof(struct peinfo), i);	
 		}
 	}
+	shmem_barrier_all();
 	qsort(pl, npes, sizeof(struct peinfo), compare);
 
 	int selfnode;
@@ -91,6 +92,7 @@ int main(int argc, char *argv[])
 		source=pl[(selfind-1+npes)%npes].pe;
 	}else if(strcmp(topo,"pair")==0){
 		int targetdirect=1;
+		printf("%d: selfind=%d selfnode=%d\n", me, selfind, selfnode);
 		if(selfnode%2==1){
 			targetdirect=-1;
 		}
