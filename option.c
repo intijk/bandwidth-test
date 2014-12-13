@@ -18,11 +18,11 @@ void parse_readable_size(size_t s, char* p){
 	g=m/1024;
 	
 	if(g>=1){
-		sprintf(p, "%.2fG", g);
+		sprintf(p, "%.6fG", g);
 	}else if(m>=1){
-		sprintf(p, "%.2fM", m);
+		sprintf(p, "%.6fM", m);
 	}else if(k>=1){
-		sprintf(p, "%.2fK", k);
+		sprintf(p, "%.6fK", k);
 	}else
 		sprintf(p, "%.0fB", b);
 
