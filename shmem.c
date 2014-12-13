@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
 
 	double tu=end_time.tv_sec*1e6+end_time.tv_usec-(start_time.tv_sec*1e6+start_time.tv_usec);
 	double ttime=tu/1e6;
-	printf("Transmission time=%.2fs\n", ttime);		
+	printf("Transmission time=%.6fs\n", ttime);		
 
 	char r[100],r1[100];	
 	parse_readable_size(npes*block_size/ttime, r);

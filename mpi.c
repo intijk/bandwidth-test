@@ -152,7 +152,7 @@ int main (int argc, char *argv[])
 	MPI_Barrier(MPI_COMM_WORLD);	
 	double et=MPI_Wtime();
 
-	printf("Transmission time=%.2fs\n", et-st);		
+	printf("Transmission time=%.6fs\n", et-st);		
 	char r[100],ra[100];
 	parse_readable_size(size*block_size/(et-st), r);
 	parse_readable_size(block_size/(et-st), ra);
