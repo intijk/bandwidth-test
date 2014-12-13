@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 	int npes=shmem_n_pes();
 	int me=shmem_my_pe();
 
-	struct peinfo *pl=(struct peinfo*)shmalloc(MAX_NODENAME_LENGTH*npes);	
+	struct peinfo *pl=(struct peinfo*)shmalloc(sizeof(struct peinfo)*npes);	
 	int i;
 	struct utsname unameData;
 	uname(&unameData);
@@ -64,6 +64,7 @@ int main(int argc, char *argv[])
 			selfind=i;
 		}
 	}
+
 	int nodesum=noderank+1;
 
 	int selfsum=1;
@@ -80,7 +81,7 @@ int main(int argc, char *argv[])
 	
 	void *block=shmalloc(block_size);
 	memset(block,0,block_size);
-	
+
 	/* pre process of the block content */	
 
 	
@@ -92,7 +93,6 @@ int main(int argc, char *argv[])
 		source=pl[(selfind-1+npes)%npes].pe;
 	}else if(strcmp(topo,"pair")==0){
 		int targetdirect=1;
-		printf("%d: selfind=%d selfnode=%d\n", me, selfind, selfnode);
 		if(selfnode%2==1){
 			targetdirect=-1;
 		}
@@ -104,6 +104,7 @@ int main(int argc, char *argv[])
 			}
 		   	selfsum=1;
 		}
+		printf("%d: selfind=%d selfnode=%d targetdirect=%d selfsum=%d \n", me, selfind, selfnode, targetdirect, selfsum);
 
 		//printf("%d: ind %d\n", rank, selfind+targetdirect*selfsum);
 		//printf("%d: targetd %d\n", rank, targetdirect);
