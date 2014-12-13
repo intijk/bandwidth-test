@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 			}
 		   	selfsum=1;
 		}
-		printf("%d: selfind=%d selfnode=%d targetdirect=%d selfsum=%d \n", me, selfind, selfnode, targetdirect, selfsum);
+		//printf("%d: selfind=%d selfnode=%d targetdirect=%d selfsum=%d \n", me, selfind, selfnode, targetdirect, selfsum);
 
 		//printf("%d: ind %d\n", rank, selfind+targetdirect*selfsum);
 		//printf("%d: targetd %d\n", rank, targetdirect);

@@ -30,7 +30,7 @@ void parse_readable_size(size_t s, char* p){
 size_t parse_size(char *optarg){
 	regex_t regex;
 	int reti;
-	reti=regcomp(&regex, "[0-9][0-9]*[kmgKMG]", 0);
+	reti=regcomp(&regex, "[0-9][0-9]*[kmgbKMGB]", 0);
 	size_t size;
 	if(reti){
 		fprintf(stderr, "Could not compile regex in parse_size()\n");
@@ -46,6 +46,9 @@ size_t parse_size(char *optarg){
 			i++;
 		}
 		switch(optarg[i]){
+			case 'b':
+			case 'B':
+				break;
 			case 'k':
 			case 'K':
 				size*=1024;
