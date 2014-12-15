@@ -131,10 +131,7 @@ int main (int argc, char *argv[])
 
 	long long dd;
 	if(delay){
-		int n=rand()%10;
-		while(n--){
-			srand(rand());
-		}
+		srand(rank);
 		double r=rand();	
 		double p=r/RAND_MAX;
 		double d=(double)(delay)*p;
