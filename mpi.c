@@ -129,16 +129,26 @@ int main (int argc, char *argv[])
 	void *block=malloc(block_size);
 	memset(block,0,block_size);
 
-	MPI_Barrier(MPI_COMM_WORLD);
-	double st=MPI_Wtime();
+	long long dd;
 	if(delay){
-		printf("delay=%lu\n", delay);
+		int n=rand()%10;
+		while(n--){
+			srand(rand());
+		}
 		double r=rand();	
 		double p=r/RAND_MAX;
 		double d=(double)(delay)*p;
-		long long dd=(long long)d;
+		dd=(long long)d;
+		if(debug){
+			printf("Real delay=%lld us\n", dd);
+		}
+	}
+	MPI_Barrier(MPI_COMM_WORLD);
+	double st=MPI_Wtime();
+	if(delay){
 		usleep(dd);
 	}
+
 
 
 	MPI_Request r1,r2;

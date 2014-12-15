@@ -119,14 +119,23 @@ int main(int argc, char *argv[])
 		printf("%d -> (%d) -> %d\n",source, me, target);
 	}
 
-	shmem_barrier_all();		
-	gettimeofday(&start_time, NULL);	
+	long long dd;
 	if(delay){
-		printf("delay=%lu\n", delay);
+		int n=rand()%10;
+		while(n--){
+			srand(rand());
+		}
 		double r=rand();	
 		double p=r/RAND_MAX;
 		double d=(double)(delay)*p;
-		long long dd=(long long)d;
+		dd=(long long)d;
+		if(debug){
+			printf("Real delay=%lld us\n", dd);
+		}
+	}
+	shmem_barrier_all();		
+	gettimeofday(&start_time, NULL);	
+	if(delay){
 		usleep(dd);
 	}
 	
