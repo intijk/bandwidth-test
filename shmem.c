@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 
 	long long dd;
 	if(delay){
-		srand(me);
+		srand(selfind);
 		double r=rand();	
 		double p=r/RAND_MAX;
 		double d=(double)(delay)*p;
